@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+.Project_name {
+    text-align: center;
+}
+
+body {
+    font-family: "Indie Flower", cursive;
+    font-weight: 600;
+    font-style: normal;
+    background-color: rgb(16, 32, 41);
+}
+
+.Project_name span {
+    font-size: 96px;
+    color: rgb(155, 208, 250);
+}
+
+.Project_name img {
+    margin-left: 32px;
+}
+
+.camera {
+    background-color: aliceblue;
+    width:500px;
+    height: 400px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    transform: translate(-100px, -200px);
+    border-radius: 36px ;
+}
+
+.table {
+    color: aliceblue;
+    font-size: 30px;
+    transform: translate(200px,200px);
+}
