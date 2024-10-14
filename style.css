@@ -34,3 +34,14 @@ video {
     border: 30px;
     border-color: rgb(185, 179, 4);
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+}
