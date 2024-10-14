@@ -14,24 +14,16 @@ body {
     font-size: 96px;
     color: rgb(155, 208, 250);
 }
-
-.Project_name img {
-    margin-left: 32px;
+.Project_name {
+    margin-top: 40px;
 }
-
 .camera {
     background-color: aliceblue;
-    width:500px;
-    height: 400px;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    transform: translate(-100px, -200px);
-    border-radius: 36px ;
-}
-
-.table {
-    color: aliceblue;
-    font-size: 30px;
-    transform: translate(200px,200px);
+    width: 700px;
+    height: 500px;
+    display: flex; 
+    border-radius: 36px;
+    justify-content: center;
+    align-items: center;
+    margin: 54px auto;
 }
