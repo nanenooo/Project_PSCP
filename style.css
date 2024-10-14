@@ -10,20 +10,27 @@ body {
     background-color: rgb(16, 32, 41);
 }
 
-.Project_name span {
+.Project-name span {
     font-size: 96px;
     color: rgb(155, 208, 250);
+    text-align: center;
+    margin-top: 1000px;
 }
-.Project_name {
-    margin-top: 40px;
+.Project-name {
+    margin-top: 60px;
+    text-align: center;
 }
 .camera {
-    background-color: aliceblue;
-    width: 700px;
-    height: 500px;
     display: flex; 
     border-radius: 36px;
     justify-content: center;
     align-items: center;
-    margin: 54px auto;
+    margin: 16px auto;
+}
+
+video {
+    margin-top: 20px;
+    border-radius: 36px;
+    border: 30px;
+    border-color: rgb(185, 179, 4);
 }
