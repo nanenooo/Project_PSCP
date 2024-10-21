@@ -1,47 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-.Project_name {
-    text-align: center;
-}
 
 body {
     font-family: "Indie Flower", cursive;
-    font-weight: 600;
-    font-style: normal;
     background-color: rgb(16, 32, 41);
+    color: white;
+    text-align: center;
 }
 
-.Project-name span {
-    font-size: 96px;
-    color: rgb(155, 208, 250);
-    text-align: center;
-    margin-top: 1000px;
-}
 .Project-name {
-    margin-top: 60px;
-    text-align: center;
+    margin-top: 20px;
 }
+
 .camera {
     display: flex; 
-    border-radius: 36px;
     justify-content: center;
-    align-items: center;
     margin: 16px auto;
 }
 
 video {
     margin-top: 20px;
-    border-radius: 36px;
-    border: 30px;
-    border-color: rgb(185, 179, 4);
+    border-radius: 15px;
+    width: 640px;
+    height: 480px;
+    background-color: #333;
 }
 
 .button-container {
     display: flex;
     justify-content: center;
+    margin-top: 10px;
 }
 
 button {
     padding: 10px 20px;
     margin: 0 10px;
     font-size: 16px;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:disabled {
+    background-color: grey;
 }

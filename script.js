@@ -1,20 +1,37 @@
-const camera = document.getElementById('video');
+const video = document.getElementById('video');
+let stream;
+
+// Start webcam access
+function startVideoStream() {
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then((stream) => {
-            video.srcObject = stream;
+        .then((mediaStream) => {
+            video.srcObject = mediaStream;
+            stream = mediaStream;
         })
         .catch((error) => {
-            console.error("ไม่สามารถเข้าถึงกล้องได้: ", error);
+            alert("Cannot access camera. Please allow camera permissions in your browser settings.");
+            console.error("Camera access error:", error);
         });
+}
+
+// Start detection (to be implemented)
 function startDetection() {
-    console.log('Start');
-    // ปิดปุ่ม Start เปิดปุ่ม Stop
     document.getElementById('start_button').disabled = true;
     document.getElementById('stop_button').disabled = false;
+    console.log("Face detection started...");
 }
+
+// Stop detection
 function stopDetection() {
-    console.log('Stop');
-    // ปิดปุ่ม Stop เปิดปุ่ม Start
     document.getElementById('start_button').disabled = false;
     document.getElementById('stop_button').disabled = true;
+
+    // Stop video stream
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+    console.log("Face detection stopped.");
 }
+
+// Immediately request camera access on page load
+startVideoStream();
