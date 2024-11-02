@@ -1,13 +1,17 @@
 import cv2
 import cvzone
-import mediapipe
 from cvzone.FaceMeshModule  import FaceMeshDetector
 
 cap = cv2.VideoCapture(0)
 detector = FaceMeshDetector(maxFaces=1)
 
 #จุดรอบดวงตาซ้าย
-idList = [22, 23, 24, 26, 110, 157, 158, 159 ,160 ,161, 130, 243]
+idList = [
+        263, 249, 390, 373, 374, 380, 381, 382, 362
+        , 466, 388, 387, 386, 386, 385, 384, 398
+        , 246, 161, 160, 159, 158, 157, 173
+        , 33, 7, 163, 144, 145, 153, 154, 155, 133
+        ]
 
 while True:
 
