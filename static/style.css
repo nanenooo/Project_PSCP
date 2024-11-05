@@ -6,6 +6,7 @@ body {
     color: white;
     background: #133E87;
 }
+
 nav {
     top: 0px;
 }
@@ -17,16 +18,20 @@ nav {
     position: fixed;
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    padding: 10px;
+    justify-content: space-between;
     border-radius: 25px;
+}
+
+.left-links {
+    display: flex;
+    gap: 20px;
 }
 
 .main a {
     text-decoration: none;
     color: white;
-    font-size: 40px;
-    margin-left: 50px;
-    margin-bottom: 0px;
+    font-size: 30px;
 }
 
 .yellow {
@@ -48,11 +53,11 @@ nav {
 }
 
 .right-text {
-    margin-left: 1570px;
-    position: fixed;
-    margin-bottom: 0px;
     font-size: 45px;
+    position: relative;
+    margin-right: 40px;
 }
+
 .camera {
     display: flex;
     justify-content: center;
@@ -67,3 +72,68 @@ nav {
     border-radius: 8px;
 }
 
+@media (max-width: 1200px) {
+    .right-text {
+        margin-left: 1200px;
+        font-size: 40px;
+    }
+
+    .main a {
+        font-size: 35px;
+        margin-left: 30px;
+    }
+
+    .camera video {
+        width: 540px;
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .right-text {
+        margin-left: 500px;
+        font-size: 30px;
+        position: relative;
+    }
+
+    .main {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .main a {
+        font-size: 25px;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .camera {
+        margin-top: 100px;
+    }
+
+    .camera video {
+        width: 100%;
+        height: auto;
+    }
+
+    .yellow, .yellow2 {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .right-text {
+        font-size: 20px;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .main a {
+        font-size: 20px;
+    }
+
+    .camera {
+        margin-top: 50px;
+    }
+}
