@@ -1,89 +1,89 @@
 import cv2
 import cvzone
-from cvzone.PlotModule import LivePlot
-from cvzone.FaceMeshModule  import FaceMeshDetector
-from flask import Flask, render_template
+from cvzone.FaceMeshModule import FaceMeshDetector
+from flask import Flask, render_template, jsonify, Response
+import threading
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+cap = cv2.VideoCapture(0)
+detector = FaceMeshDetector(maxFaces=1)
+blinkCounter = 0
 
-if __name__ == "__main__" :
-    app.run()
+def countBlinks():
+    """ ตรวจจับตา และหาการกระพริบตา """
+    global blinkCounter, cap, detector
 
-def blinkCount():
-
-    cap = cv2.VideoCapture(0)
-    detector = FaceMeshDetector(maxFaces=1)
-    plotY = LivePlot(640, 360, [20, 50], invert=True)
-
-    #จุดรอบดวงตาซ้าย
-    idList = [22, 23, 24, 26, 110, 157, 158, 159 ,160 ,161, 130, 243]
-    eyeList = []
-    blinkCouter = 0
-    counter = 0
+    eyeList, counter = [], 0
 
     while True:
-
         if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
         success, img = cap.read()
         img, faces = detector.findFaceMesh(img, draw=False)
 
-        #วาดจุดรอบดวงตา
         if faces:
             face = faces[0]
-            for id in idList:
-                cv2.circle(img, face[id], 3, (255, 0, 255), cv2.FILLED)
-
-            #วาดจุดแนวตั้งกับแนวนอน
-            leftUp = face[159]
-            leftDown = face[145]
-            leftLeft = face[33]
-            leftRight = face[133]
+            # วาดจุดแนวตั้งกับแนวนอน
+            leftUp, leftDown = face[159], face[145]
+            leftLeft, leftRight = face[33], face[133]
             lenghtVer, _ = detector.findDistance(leftUp, leftDown)
             lenghtHor, _ = detector.findDistance(leftLeft, leftRight)
             cv2.line(img, leftUp, leftDown, (0, 200, 0), 2)
             cv2.line(img, leftLeft, leftRight, (0, 200, 0), 2)
 
-            #หาพื้นที่ดวงตา
-            eyeArea = int((0.05*(lenghtVer*lenghtHor)))
+            # หาพื้นที่ดวงตา
+            eyeArea = int((0.05 * (lenghtVer * lenghtHor)))
             eyeList.append(eyeArea)
 
             if len(eyeList) > 3:
                 eyeList.pop(0)
 
-            eyeAvg = sum(eyeList)/len(eyeList)
+            eyeAvg = sum(eyeList) / len(eyeList)
             eyeDiff = abs(eyeAvg - eyeList[-1])
 
             if eyeDiff > 4 and counter == 0:
-                blinkCouter += 1
+                blinkCounter += 1
                 counter += 1
             if counter != 0:
                 counter += 1
                 if counter > 10:
                     counter = 0
 
-            cvzone.putTextRect(img, f"Blink Count: {blinkCouter}", (50,100))
-            imgPlot = plotY.update(eyeAvg)
-            imgStack = cvzone.stackImages([img, imgPlot], 2, 1)
-
-        # ตรวจสอบ frame
-        if not  success:
-            print("Can not connect")
+def generate_frames():
+    """ส่งเฟรมวิดีโอจากกล้อง"""
+    while True:
+        success, img = cap.read()
+        if not success:
             break
+        else:
+            # เฟรมเป็น jpg
+            ret, buffer = cv2.imencode('.jpg', img)
+            frame = buffer.tobytes()
+            # ส่งออกเฟรม
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-        cv2.imshow("Image", imgStack)
+@app.route('/')
+def index():
+    """ index page """
+    return render_template('index.html')
 
-        # q for close
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+@app.route('/blink_count', methods=['GET'])
+def get_blinkCount():
+    """ ส่งข้อมูลไปให้ js """
+    global blinkCounter
+    return jsonify(blink_count=blinkCounter)
 
-        cv2.waitKey(25)
+@app.route('/video_feed')
+def video_feed():
+    """ส่งข้อมูลวิดีโอไปยัง img tag"""
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    cap.release()
-    cv2.destroyAllWindows()
-blinkCount()
+
+if __name__ == "__main__":
+    blink_thread = threading.Thread(target=countBlinks)
+    blink_thread.daemon = True
+    blink_thread.start()
+    app.run(debug=True, use_reloader=False)

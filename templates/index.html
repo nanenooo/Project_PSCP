@@ -21,7 +21,23 @@
     </nav>
 
     <div class="camera">
-        <video id="video" autoplay playsinline></video>
+        <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
     </div>
+    <div id="blinkCountDisplay">Blink Count: 0</div>
+<script>
+    // รับค่ากระพริบตา
+    async function updateBlinkCount() {
+    try {
+        const response = await fetch('/blink_count');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        document.getElementById('blinkCountDisplay').innerText = `Blink Count: ${data.blink_count}`;
+    } catch (error) {
+        console.error('Error fetching blink count:', error);
+    }
+}
+// อัปเดทการกระพริบทุกๆ 1000ms
+setInterval(updateBlinkCount, 1000);
+</script>
 </body>
 </html>
