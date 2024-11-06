@@ -1,5 +1,4 @@
 import cv2
-import cvzone
 from cvzone.FaceMeshModule import FaceMeshDetector
 from flask import Flask, render_template, jsonify, Response
 import threading
