@@ -20,7 +20,8 @@ nav {
     display: flex;
     align-items: center;
     padding: 10px;
-    justify-content: space-between;
+    justify-content: right;
+    gap: 70px;
     border: 2px solid #45599b;
 }
 
@@ -67,9 +68,9 @@ nav {
 }
 
 .camera video {
-    width: 640px;
-    height: 480px;
-    border: 2px solid white;
+    width: auto;
+    height: auto;
+    border: 2px solid rgb(67, 97, 126);
     border-radius: 8px;
 }
 
