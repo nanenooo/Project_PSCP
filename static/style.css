@@ -143,26 +143,29 @@ nav {
 }
 
 .column-left{
-    background-color: #61036e;
+    background-color: transparent;
     color: white;
     padding: 20px;
     border-radius: 8px;
+    border: 2px solid #45599b;
     flex: 1;
 }
 
 .column-middle{
-    background-color: #03346E;
+    background-color: transparent;
     color: white;
     padding: 20px;
     border-radius: 8px;
+    border: 2px solid #45599b;
     flex: 1;
 }
 
 .column-right{
-    background-color: #036e23;
+    background-color: transparent;
     color: white;
     padding: 20px;
     border-radius: 8px;
+    border: 2px solid #45599b;
     flex: 1;
 }
 
