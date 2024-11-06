@@ -137,3 +137,36 @@ nav {
         margin-top: 50px;
     }
 }
+
+.container {
+    height: 768px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 100px; 
+    padding: 20px;
+    gap: 10px;
+}
+
+.column-left{
+    background-color: #61036e;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1; /* Adjust to change width proportion */
+}
+
+.column-middle{
+    background-color: #03346E;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1; /* Adjust to change width proportion */
+}
+
+.column-right{
+    background-color: #036e23;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1; /* Adjust to change width proportion */
+}
