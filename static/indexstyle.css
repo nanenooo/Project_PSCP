@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.bigbox {
+    display: flex;
+    gap: 30%;
+}
+ 
+.text {
+    background-color: #fefefe;
+    padding: 50px;
+    margin: 20px;
+    margin-top: 10%;
+}
+ 
+.text h1 {
+    font-size: 4em;
+    color: #191933;
+}
+ 
+.text p {
+    font-size: 2em;
+    color: #191933;
+}
+ 
+.text button {
+    background-color: #4d4dff;
+    color: #fefefe;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 2.5cm;
+}
+ 
+.text button:hover {
+    background-color: #3f3fff;
+}
+
+.space {
+    display: flex;
+    gap: 20px;
+}
+
+.img {
+    margin-top: 16%;
+}
