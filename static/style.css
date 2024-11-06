@@ -20,7 +20,8 @@ nav {
     display: flex;
     align-items: center;
     padding: 10px;
-    justify-content: space-between;
+    justify-content: right;
+    gap: 60px;
     border: 2px solid #45599b;
 }
 
@@ -136,7 +137,7 @@ nav {
 }
 
 .container {
-    height: auto;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     margin-top: 75px;
