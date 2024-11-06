@@ -132,11 +132,6 @@ nav {
     .main a {
         font-size: 20px;
     }
-
-    .camera {
-        height: 20%;
-        margin-top: 25px;
-    }
 }
 
 .container {
@@ -170,5 +165,10 @@ nav {
     padding: 20px;
     border-radius: 8px;
     flex: 1;
+}
+
+.camera {
+    height: 10%;
+    margin-top: 25px;
 }
 
