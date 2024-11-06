@@ -8,9 +8,8 @@
 </head>
 <body>
     <nav class="main">
-        <a href="https://github.com/nanenooo/Project_PSCP" target="_blank">Github</a>
         <a href="">How to use</a>
-        <a href="index.html" class="right-text">Main</a>
+        <a href="/" class="right-text">Main</a>
     </nav>
 
     <div class="container">
@@ -21,29 +20,31 @@
         </div>
 
         <div class="column-middle">
-            <h1>Blink count :</h1>
-            <div class="camera">
-                <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
-            </div>
-            <script>
-                // รับค่ากระพริบตา
-                async function updateBlinkCount() {
-                try {
-                    const response = await fetch('/blink_count');
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    const data = await response.json();
-                    document.getElementById('blinkCountDisplay').innerText = `Blink Count: ${data.blink_count}`;
-                } catch (error) {
-                    console.error('Error fetching blink count:', error);
-                }
+            <h1 id="blinkCountDisplay">Blink Count: 0</h1>
+    <div class="camera">
+        <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
+    </div>
+    <script>
+        // ฟังก์ชันอัปเดตค่าการกระพริบตา
+        async function updateBlinkCount() {
+            try {
+                const response = await fetch('/blink_count');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                document.getElementById('blinkCountDisplay').innerText = `Blink Count: ${data.blink_count}`;
+            } catch (error) {
+                console.error('Error fetching blink count:', error);
             }
-            // อัปเดทการกระพริบทุกๆ 1000ms
-            setInterval(updateBlinkCount, 100);
-            </script>
+        }
+        // อัปเดทการกระพริบทุกๆ 1000ms
+        setInterval(updateBlinkCount, 1000);
+    </script>
+
         </div>
 
         <div class="column-right">
-            <h1>Suggest blink per min :</h1>
+            <h1>Suggest blink</h1>
+            <h1>per min : 15-20times</h1>
 
         </div>
     </div>

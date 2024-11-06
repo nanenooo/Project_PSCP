@@ -65,7 +65,7 @@ def countBlinks():
                 rightEyeDiff = abs(rightEyeAvg - rightEyeList[-1])
 
                 # ตรวจจับการกระพริบ
-                if leftEyeDiff > 4 and counter == 0:
+                if leftEyeDiff > 3 and counter == 0:
                     blinkCounter += 1
                     counter = 1
 
@@ -92,6 +92,11 @@ def generate_frames():
 @app.route('/')
 def index():
     """ index page """
+    return render_template('index.html')
+
+@app.route('/blink.html')
+def blink():
+    """ blink page """
     return render_template('Blink.html')
 
 @app.route('/blink_count', methods=['GET'])
