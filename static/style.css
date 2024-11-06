@@ -134,7 +134,7 @@ nav {
     }
 
     .camera {
-        margin-top: 50px;
+        margin-top: 25px;
     }
 }
 
@@ -152,7 +152,7 @@ nav {
     color: white;
     padding: 20px;
     border-radius: 8px;
-    flex: 1; /* Adjust to change width proportion */
+    flex: 1;
 }
 
 .column-middle{
@@ -160,7 +160,7 @@ nav {
     color: white;
     padding: 20px;
     border-radius: 8px;
-    flex: 1; /* Adjust to change width proportion */
+    flex: 1;
 }
 
 .column-right{
@@ -168,5 +168,6 @@ nav {
     color: white;
     padding: 20px;
     border-radius: 8px;
-    flex: 1; /* Adjust to change width proportion */
+    flex: 1;
 }
+
