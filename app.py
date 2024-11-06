@@ -93,7 +93,7 @@ def generate_frames():
 @app.route('/')
 def index():
     """ index page """
-    return render_template('index.html')
+    return render_template('Blink.html')
 
 @app.route('/blink_count', methods=['GET'])
 def get_blinkCount():

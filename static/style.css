@@ -20,7 +20,6 @@ nav {
     align-items: center;
     padding: 10px;
     justify-content: space-between;
-    border-radius: 25px;
 }
 
 .left-links {
@@ -99,7 +98,7 @@ nav {
     .main {
         flex-direction: column;
         height: auto;
-        padding: 10px;
+        padding: 5px;
     }
 
     .main a {
@@ -135,10 +134,10 @@ nav {
 }
 
 .container {
-    height: 700px;
+    height: auto;
     display: flex;
     justify-content: space-between;
-    margin-top: 100px; 
+    margin-top: 50px;
     padding: 20px;
     gap: 10px;
 }
@@ -168,7 +167,8 @@ nav {
 }
 
 .camera {
-    height: 10%;
+    height: 70%;
     margin-top: 25px;
+    border-radius: 24px;
 }
 
