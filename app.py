@@ -27,46 +27,54 @@ def countBlinks():
         if faces:
             face = faces[0]
 
-            # ระบุตำแหน่งดวงตา
-            leftUp, leftDown = face[159], face[145]
-            leftLeft, leftRight = face[33], face[133]
-            rightUp, rightDown = face[243], face[37]
-            rightLeft, rightRight = face[463], face[263]
+            # ระบุตำแหน่งจมูกกับดวงตา
+            nose = face[1]
+            leftEyeCorner, rightEyeCorner = face[33], face[263]
 
-            # คำนวณหาระยะดวงตาแต่ละจุด
-            leftLenghtVer, _ = detector.findDistance(leftUp, leftDown)
-            leftLenghtHor, _ = detector.findDistance(leftLeft, leftRight)
-            rightLenghtVer, _ = detector.findDistance(rightUp, rightDown)
-            rightLenghtHor, _ = detector.findDistance(rightLeft, rightRight)
+            # ตรวจสอบว่าหน้ามองจอมั้ย
+            face_direction = abs(leftEyeCorner[0] - rightEyeCorner[0])
+            if face_direction < 120:
 
-            # หาพื้นที่ของดวงตา
-            leftEyeArea = int(0.05 * (leftLenghtVer * leftLenghtHor))
-            rightEyeArea = int(0.05 * (rightLenghtVer * rightLenghtHor))
-            leftEyeList.append(leftEyeArea)
-            rightEyeList.append(rightEyeArea)
+                # ระบุตำแหน่งดวงตา
+                leftUp, leftDown = face[159], face[145]
+                leftLeft, leftRight = face[33], face[133]
+                rightUp, rightDown = face[243], face[37]
+                rightLeft, rightRight = face[463], face[263]
 
-            # จำกัดข้อมูลใน List
-            if len(leftEyeList) > 3:
-                leftEyeList.pop(0)
-            if len(rightEyeList) > 3:
-                rightEyeList.pop(0)
+                # คำนวณหาระยะดวงตาแต่ละจุด
+                leftLenghtVer, _ = detector.findDistance(leftUp, leftDown)
+                leftLenghtHor, _ = detector.findDistance(leftLeft, leftRight)
+                rightLenghtVer, _ = detector.findDistance(rightUp, rightDown)
+                rightLenghtHor, _ = detector.findDistance(rightLeft, rightRight)
 
-            # หา Avg, Diff
-            leftEyeAvg = sum(leftEyeList) / len(leftEyeList)
-            rightEyeAvg = sum(rightEyeList) / len(rightEyeList)
-            leftEyeDiff = abs(leftEyeAvg - leftEyeList[-1])
-            rightEyeDiff = abs(rightEyeAvg - rightEyeList[-1])
+                # หาพื้นที่ของดวงตา
+                leftEyeArea = int(0.05 * (leftLenghtVer * leftLenghtHor))
+                rightEyeArea = int(0.05 * (rightLenghtVer * rightLenghtHor))
+                leftEyeList.append(leftEyeArea)
+                rightEyeList.append(rightEyeArea)
 
-            # ตรวจจับการกระพริบ
-            if leftEyeDiff > 4 and counter == 0:
-                blinkCounter += 1
-                counter = 1
+                # จำกัดข้อมูลใน List
+                if len(leftEyeList) > 3:
+                    leftEyeList.pop(0)
+                if len(rightEyeList) > 3:
+                    rightEyeList.pop(0)
 
-            # หน่วงเวลา
-            if counter != 0:
-                counter += 1
-                if counter > 10:
-                    counter = 0
+                # หา Avg, Diff
+                leftEyeAvg = sum(leftEyeList) / len(leftEyeList)
+                rightEyeAvg = sum(rightEyeList) / len(rightEyeList)
+                leftEyeDiff = abs(leftEyeAvg - leftEyeList[-1])
+                rightEyeDiff = abs(rightEyeAvg - rightEyeList[-1])
+
+                # ตรวจจับการกระพริบ
+                if leftEyeDiff > 4 and counter == 0:
+                    blinkCounter += 1
+                    counter = 1
+
+                # หน่วงเวลา
+                if counter != 0:
+                    counter += 1
+                    if counter > 10:
+                        counter = 0
 
 def generate_frames():
     """ส่งเฟรมวิดีโอจากกล้อง"""
