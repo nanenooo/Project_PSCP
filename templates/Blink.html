@@ -8,7 +8,6 @@
 </head>
 <body>
     <nav class="main">
-        <a href="">How to use</a>
         <a href="/" class="right-text">Main</a>
     </nav>
 
@@ -21,6 +20,9 @@
         <div class="column-middle">
             <h1>Blink Count: <span id="blinkCountDisplay">0</span></h1>
             <h1 id="blinkCountDisplay"></h1>
+            <div class="camera">
+                <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
+            </div>
         </div>
     
         <div class="column-right">
@@ -39,6 +41,10 @@
                 document.getElementById('blinkCountPerMin').textContent = data.blink_count_per_min;
                 document.getElementById('averageMin').textContent = data.average_min;
                 document.getElementById('blinkCountDisplay').textContent = data.blink_count;
+
+                if (blinkCountPerMin < 15) {
+                    alert("Warning: Blink count per minute is below the suggested range!");
+                }
             } catch (error) {
                 console.error('Error fetching blink data:', error);
             }
