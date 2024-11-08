@@ -14,51 +14,38 @@
 
     <div class="container">
         <div class="column-left">
-            <h1>Blink count per min:<span id="blinkCountPerMin">0</span></h1>
-            <h1>Average min:<span id="averageMin">0.00</span></h1>
+            <h1>Blink count per min: <span id="blinkCountPerMin">0</span></h1>
+            <h1>Average min: <span id="averageMin">0.00</span></h1>
         </div>
-        <script>
-            // ฟังก์ชันสำหรับอัปเดตค่าจากเซิร์ฟเวอร์
-            function updateBlinkData() {
-                fetch('/blink_count')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('blinkCountPerMin').textContent = data.blink_count_per_min;
-                        document.getElementById('averageMin').textContent = data.average_min;
-                    })
-                    .catch(error => console.error('Error fetching blink data:', error));
-            }
-
-            setInterval(updateBlinkData, 60000);
-            updateBlinkData();
-        </script>
+    
         <div class="column-middle">
-            <h1>Blink Count:<span id="blinkCountDisplay">0</span></h1>
-    <div class="camera">
-        <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
-    </div>
-    <script>
-        // ฟังก์ชันอัปเดตค่าการกระพริบตา
-        async function updateBlinkCount() {
-    try {
-        const response = await fetch('/blink_count');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        document.getElementById('blinkCountDisplay').textContent = data.blink_count;
-    } catch (error) {
-        console.error('Error fetching blink count:', error);
-    }
-}
-
-    </script>
-
+            <h1>Blink Count: <span id="blinkCountDisplay">0</span></h1>
+            <h1 id="blinkCountDisplay"></h1>
         </div>
-
+    
         <div class="column-right">
             <h1>Suggest blink</h1>
             <h1>per min : 15-20times</h1>
-
         </div>
     </div>
+    
+    <script>
+        // อัปเดตค่า
+        async function updateBlinkData() {
+            try {
+                const response = await fetch('/blink_count');
+                const data = await response.json();
+
+                document.getElementById('blinkCountPerMin').textContent = data.blink_count_per_min;
+                document.getElementById('averageMin').textContent = data.average_min;
+                document.getElementById('blinkCountDisplay').textContent = data.blink_count;
+            } catch (error) {
+                console.error('Error fetching blink data:', error);
+            }
+        }
+
+        setInterval(updateBlinkData, 100);
+        updateBlinkData();
+    </script>
 </body>
 </html>

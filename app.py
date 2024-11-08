@@ -12,6 +12,7 @@ blinkCounter = 0
 blink_count = 0
 blink_count_per_minute = 0
 blink_counts_per_minute_list = []
+average_blinks_per_minute = 0
 
 def countBlinks():
     """ ตรวจจับและนับการกระพริบตา """
@@ -35,14 +36,13 @@ def countBlinks():
         if faces:
             face = faces[0]
 
-            cv2.imshow("Frame", img)
             # ระบุตำแหน่งจมูกกับดวงตา
             nose = face[1]
             leftEyeCorner, rightEyeCorner = face[33], face[263]
 
             # ตรวจสอบว่าหน้ามองจอมั้ย
             face_direction = abs(leftEyeCorner[0] - rightEyeCorner[0])
-            if face_direction < 120:
+            if face_direction < 200:
 
                 # ระบุตำแหน่งดวงตา
                 leftUp, leftDown = face[159], face[145]
@@ -77,15 +77,15 @@ def countBlinks():
                 # ตรวจจับการกระพริบ
                 if leftEyeDiff > 3 and counter == 0:
                     blinkCounter += 1
-                    print(f"Blink detected! Total count: {blinkCounter}")  # แสดงค่า blinkCounter ใน console
+                    print(f"Blink detected! Total count: {blinkCounter}")
                     counter = 1
-
 
                 # หน่วงเวลา
                 if counter != 0:
                     counter += 1
                     if counter > 10:
                         counter = 0
+            
 
 def generate_frames():
     """ส่งเฟรมวิดีโอจากกล้อง"""
@@ -102,23 +102,26 @@ def generate_frames():
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 def count_blinks_per_minute():
-    """กระพริบตาต่อนาที"""
-    global blink_count, blink_count_per_minute, blink_counts_per_minute_list
+    """ กระพริบตาต่อนาที """
+    global blinkCounter, blink_counts_per_minute_list, blink_count_per_minute, average_blinks_per_minute
 
     while True:
-        time.sleep(60)
-        blink_count_per_minute = blink_count
-        blink_counts_per_minute_list.append(blink_count_per_minute)
+        time.sleep(60)  # หน่วงเวลาหนึ่งนาที
+
+        blink_count_per_minute = blinkCounter  # เก็บค่าการกระพริบในนาทีนี้
+        blink_counts_per_minute_list.append(blink_count_per_minute)  # เก็บค่าลงใน list
 
         # คำนวณค่าเฉลี่ยของการกระพริบต่อนาที
-        average_blinks_per_minute = sum(blink_counts_per_minute_list) / len(blink_counts_per_minute_list)
+        if blink_counts_per_minute_list:
+            average_blinks_per_minute = sum(blink_counts_per_minute_list) / len(blink_counts_per_minute_list)
+        else:
+            average_blinks_per_minute = 0
 
         print(f"Blink count per min: {blink_count_per_minute}")
         print(f"Average min: {average_blinks_per_minute:.2f}")
 
-        blink_count = 0
-
-threading.Thread(target=count_blinks_per_minute, daemon=True).start()
+        # รีเซ็ตตัวนับการกระพริบสำหรับนาทีถัดไป
+        blinkCounter = 0
 
 @app.route('/')
 def index():
@@ -133,23 +136,16 @@ def blink():
 @app.route('/blink_count', methods=['GET'])
 def get_blinkCount():
     """ ส่งข้อมูลไปให้ js """
-    global blinkCounter
-    print(f"Blink count sent to client: {blinkCounter}")  # แสดงใน console เมื่อส่งค่า
-    return jsonify(blink_count=blinkCounter)
+    global blinkCounter, blink_count_per_minute, average_blinks_per_minute
+    print(f"Blink count sent to client: {blinkCounter}")
+    return jsonify(
+        {
+            'blink_count': blinkCounter,
+            'blink_count_per_min': blink_count_per_minute,
+            'average_min': f"{average_blinks_per_minute:.2f}"
+        }
+    )
 
-@app.route('/blink_count')
-def get_blink_count():
-    global blink_count_per_minute, blink_counts_per_minute_list
-
-    if len(blink_counts_per_minute_list) > 0:
-        average_blinks_per_minute = sum(blink_counts_per_minute_list) / len(blink_counts_per_minute_list)
-    else:
-        average_blinks_per_minute = 0
-
-    return jsonify({
-        'blink_count_per_min': blink_count_per_minute,
-        'average_min': f"{average_blinks_per_minute:.2f}"
-    })
 
 @app.route('/video_feed')
 def video_feed():
@@ -160,5 +156,5 @@ if __name__ == "__main__":
     blink_thread = threading.Thread(target=countBlinks)
     blink_thread.daemon = True
     blink_thread.start()
-    print("Starting blink detection thread")
+    threading.Thread(target=count_blinks_per_minute, daemon=True).start()
     app.run(debug=True, use_reloader=False)
