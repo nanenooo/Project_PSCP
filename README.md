@@ -1,4 +1,4 @@
-# Blink Detection and Alert System with Flask and OpenCV
+# Blink Detection with Flask and OpenCV
 
 This project uses a computer vision model to detect blinks in real-time using a webcam and Flask. It sends data to a webpage, where the blink count and average blink count per minute are displayed. If the blink count per minute is below 15, the user is alerted.
 
@@ -8,7 +8,6 @@ This project uses a computer vision model to detect blinks in real-time using a 
 - Detects blinks using OpenCV and the FaceMesh detector.
 - Sends blink count data to a webpage.
 - Displays real-time video feed with blink data on a Flask webpage.
-- Alerts the user if the blink count per minute is below the recommended range.
 
 ### Blink.html:
 - Displays the blink count, blink count per minute, and average blink count.

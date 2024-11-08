@@ -28,11 +28,6 @@ def countBlinks():
         success, img = cap.read()
         img, faces = detector.findFaceMesh(img, draw=False)
 
-        #ตรวจสอบว่าเจอหน้า
-        if not faces:
-            print("No faces detected")
-            continue
-
         if faces:
             face = faces[0]
 
@@ -77,7 +72,6 @@ def countBlinks():
                 # ตรวจจับการกระพริบ
                 if leftEyeDiff > 3 and counter == 0:
                     blinkCounter += 1
-                    print(f"Blink detected! Total count: {blinkCounter}")
                     counter = 1
 
                 # หน่วงเวลา
@@ -117,9 +111,6 @@ def count_blinks_per_minute():
         else:
             average_blinks_per_minute = 0
 
-        print(f"Blink count per min: {blink_count_per_minute}")
-        print(f"Average min: {average_blinks_per_minute:.2f}")
-
         # รีเซ็ตตัวนับการกระพริบสำหรับนาทีถัดไป
         blinkCounter = 0
 
@@ -137,7 +128,6 @@ def blink():
 def get_blinkCount():
     """ ส่งข้อมูลไปให้ js """
     global blinkCounter, blink_count_per_minute, average_blinks_per_minute
-    print(f"Blink count sent to client: {blinkCounter}")
     return jsonify(
         {
             'blink_count': blinkCounter,
