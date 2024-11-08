@@ -32,6 +32,6 @@ This project uses a computer vision model to detect blinks in real-time using a 
 ## Installation
 
 1. Install all dependencies with a single command:
-  """
+  ```
   pip install -r requirements.txt
-  """
+  ```
