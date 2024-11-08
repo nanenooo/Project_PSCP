@@ -2,12 +2,16 @@ import cv2
 from cvzone.FaceMeshModule import FaceMeshDetector
 from flask import Flask, render_template, jsonify, Response
 import threading
+import time
 
 app = Flask(__name__)
 
 cap = cv2.VideoCapture(0)
 detector = FaceMeshDetector(maxFaces=1)
 blinkCounter = 0
+blink_count = 0
+blink_count_per_minute = 0
+blink_counts_per_minute_list = []
 
 def countBlinks():
     """ ตรวจจับและนับการกระพริบตา """
@@ -23,9 +27,15 @@ def countBlinks():
         success, img = cap.read()
         img, faces = detector.findFaceMesh(img, draw=False)
 
+        #ตรวจสอบว่าเจอหน้า
+        if not faces:
+            print("No faces detected")
+            continue
+
         if faces:
             face = faces[0]
 
+            cv2.imshow("Frame", img)
             # ระบุตำแหน่งจมูกกับดวงตา
             nose = face[1]
             leftEyeCorner, rightEyeCorner = face[33], face[263]
@@ -67,7 +77,9 @@ def countBlinks():
                 # ตรวจจับการกระพริบ
                 if leftEyeDiff > 3 and counter == 0:
                     blinkCounter += 1
+                    print(f"Blink detected! Total count: {blinkCounter}")  # แสดงค่า blinkCounter ใน console
                     counter = 1
+
 
                 # หน่วงเวลา
                 if counter != 0:
@@ -89,6 +101,25 @@ def generate_frames():
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+def count_blinks_per_minute():
+    """กระพริบตาต่อนาที"""
+    global blink_count, blink_count_per_minute, blink_counts_per_minute_list
+
+    while True:
+        time.sleep(60)
+        blink_count_per_minute = blink_count
+        blink_counts_per_minute_list.append(blink_count_per_minute)
+
+        # คำนวณค่าเฉลี่ยของการกระพริบต่อนาที
+        average_blinks_per_minute = sum(blink_counts_per_minute_list) / len(blink_counts_per_minute_list)
+
+        print(f"Blink count per min: {blink_count_per_minute}")
+        print(f"Average min: {average_blinks_per_minute:.2f}")
+
+        blink_count = 0
+
+threading.Thread(target=count_blinks_per_minute, daemon=True).start()
+
 @app.route('/')
 def index():
     """ index page """
@@ -103,16 +134,31 @@ def blink():
 def get_blinkCount():
     """ ส่งข้อมูลไปให้ js """
     global blinkCounter
+    print(f"Blink count sent to client: {blinkCounter}")  # แสดงใน console เมื่อส่งค่า
     return jsonify(blink_count=blinkCounter)
+
+@app.route('/blink_count')
+def get_blink_count():
+    global blink_count_per_minute, blink_counts_per_minute_list
+
+    if len(blink_counts_per_minute_list) > 0:
+        average_blinks_per_minute = sum(blink_counts_per_minute_list) / len(blink_counts_per_minute_list)
+    else:
+        average_blinks_per_minute = 0
+
+    return jsonify({
+        'blink_count_per_min': blink_count_per_minute,
+        'average_min': f"{average_blinks_per_minute:.2f}"
+    })
 
 @app.route('/video_feed')
 def video_feed():
     """ส่งข้อมูลวิดีโอไปยัง img tag"""
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
 if __name__ == "__main__":
     blink_thread = threading.Thread(target=countBlinks)
     blink_thread.daemon = True
     blink_thread.start()
+    print("Starting blink detection thread")
     app.run(debug=True, use_reloader=False)

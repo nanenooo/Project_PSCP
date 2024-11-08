@@ -14,30 +14,42 @@
 
     <div class="container">
         <div class="column-left">
-            <h1>Blink count per min :</h1>
-
-            <h1>Average min :</h1>
+            <h1>Blink count per min:<span id="blinkCountPerMin">0</span></h1>
+            <h1>Average min:<span id="averageMin">0.00</span></h1>
         </div>
+        <script>
+            // ฟังก์ชันสำหรับอัปเดตค่าจากเซิร์ฟเวอร์
+            function updateBlinkData() {
+                fetch('/blink_count')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('blinkCountPerMin').textContent = data.blink_count_per_min;
+                        document.getElementById('averageMin').textContent = data.average_min;
+                    })
+                    .catch(error => console.error('Error fetching blink data:', error));
+            }
 
+            setInterval(updateBlinkData, 60000);
+            updateBlinkData();
+        </script>
         <div class="column-middle">
-            <h1 id="blinkCountDisplay">Blink Count: 0</h1>
+            <h1>Blink Count:<span id="blinkCountDisplay">0</span></h1>
     <div class="camera">
         <img id="video" src="{{ url_for('video_feed') }}" alt="Camera Feed">
     </div>
     <script>
         // ฟังก์ชันอัปเดตค่าการกระพริบตา
         async function updateBlinkCount() {
-            try {
-                const response = await fetch('/blink_count');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                document.getElementById('blinkCountDisplay').innerText = `Blink Count: ${data.blink_count}`;
-            } catch (error) {
-                console.error('Error fetching blink count:', error);
-            }
-        }
-        // อัปเดทการกระพริบทุกๆ 1000ms
-        setInterval(updateBlinkCount, 1000);
+    try {
+        const response = await fetch('/blink_count');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        document.getElementById('blinkCountDisplay').textContent = data.blink_count;
+    } catch (error) {
+        console.error('Error fetching blink count:', error);
+    }
+}
+
     </script>
 
         </div>
